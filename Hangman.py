@@ -17,7 +17,6 @@ root.resizable(0,0)
 root.config(bg="white")
 
 def StartIsPressed():
-    
     def FruitIsPressed():
         
         LLevel.destroy()
@@ -102,7 +101,115 @@ def StartIsPressed():
         NewGame.grid(row=3, column=8, sticky="NSWE")
         newGame()
         
-    
+    def ApplicationIsPressed():
+        
+        LLevel.destroy()
+        Fruit.destroy()
+        Sport.destroy()    
+        Movie.destroy()
+        Countries.destroy()
+        Animal.destroy()
+        Brands.destroy()
+        Application.destroy()
+        
+        word_list = ("FACEBOOK", "INSTAGRAM", "SNAPCHAT", "FLIPKART", "AMAZON", "FREE FIRE",
+        "MYNTRA", "WHATSAPP", "ZOOM", "YOUTUBE", "UBER")
+
+        app_hints = {
+            'FACEBOOK': 'Maximum fake account',
+            'INSTAGRAM': 'known as a step brother of Facebook', 
+            'SNAPCHAT': 'ghost logo',
+            'FLIPKART': 'fashion sale', 
+            'AMAZON': 'the name related to the world largest river', 
+            'FREE FIRE': 'battle royale game', 
+            'MYNTRA' : 'Indian fashion eCommerce company', 
+            'WHATSAPP' : 'commonly used by everyone',
+            'ZOOM' : 'hated by student during pandemic', 
+            'YOUTUBE' : 'online video platform owned by Google', 
+            'UBER' : 'transport application'
+        }
+
+        photos = [PhotoImage(file="hang0.png"), PhotoImage(file="hang1.png"), PhotoImage(file="hang2.png"), PhotoImage(file="hang3.png"), PhotoImage(file="hang4.png"), PhotoImage(file="hang5.png"), PhotoImage(file="hang6.png"),
+                  PhotoImage(file="hang7.png"), PhotoImage(file="hang8.png"), PhotoImage(file="hang9.png"), PhotoImage(file="hang10.png"), PhotoImage(file="hang11.png")]
+        
+        def newGame():
+            global the_word_withSpaces
+            global numberOfGuesses
+            numberOfGuesses=0
+            imgLabel.config(image=photos[0])
+            the_word=random.choice(word_list)
+            the_word_withSpaces=" ".join(the_word)
+            lblWord.set(" ".join("_"*len(the_word)))
+            
+        def guess(letter):
+            global numberOfGuesses
+            global guessed_letters
+            if numberOfGuesses<11:
+                txt=list(the_word_withSpaces)
+                print(txt)
+                guessed=list(lblWord.get())
+                print(guessed)
+                guessed_letters = []
+                for i in guessed:
+                    if i.isalpha():
+                        guessed_letters.append(i)
+                    
+                print(guessed_letters)
+                if the_word_withSpaces.count(letter)>0:
+                    for c in range(len(txt)):
+                        if txt[c]==letter:
+                            guessed[c]=letter
+                        lblWord.set("".join(guessed))
+                        if lblWord.get()==the_word_withSpaces:
+                            if numberOfGuesses <= 3:
+                                messagebox.showinfo("Hangman","Your score is 3")
+                            elif numberOfGuesses >3 and numberOfGuesses <=6:
+                                messagebox.showinfo("Hangman","Your score is 2")
+                            elif numberOfGuesses >6 and numberOfGuesses <=9:
+                                messagebox.showinfo("Hangman","Your score is 1")
+                            else:
+                                messagebox.showinfo("Hangman","Your score is 0")
+                                         
+                else:
+                    numberOfGuesses+=1
+                    imgLabel.config(image=photos[numberOfGuesses])
+                    # txt = list(the_word_withSpaces)
+                    # print(txt)
+                    # print(the_word_withSpaces)
+                    # print(type(the_word_withSpaces))
+                    # print(txt)
+                    # print(type(txt))
+                    new_word = the_word_withSpaces.replace(" ", "")
+                    print(new_word)
+                    show_letter = app_hints[new_word]
+                    # guessed=list(lblWord.get())
+                    # show_letter = random.choice(list(set(the_word_withSpaces).difference(guessed_letters)))
+                    # show_letter = random.choice(list(the_word_withSpaces))
+                    print(show_letter)
+                    messagebox.showinfo("Hangman","Hint - %s" %(show_letter))
+                    if numberOfGuesses==11:
+                        messagebox.showwarning("Hangman","Game Over")
+                    
+                
+        imgLabel=Label(root)
+        imgLabel.grid(row=0, column=0, columnspan=3)
+        imgLabel.config(image=photos[0])
+        
+        lblWord=StringVar()
+        Label(root, textvariable=lblWord, font=("Times New Roman", 24, "bold")).grid(row=0, column=3, columnspan=6)
+        
+        n=0
+        for c in ascii_uppercase:
+            Alphabet=Button(root, text=c, command=lambda c=c: guess(c), font=("Californian", 18, "bold"), width=4, justify="center")
+            Alphabet.grid(row=1+n//9, column=n%9)
+            n+=1
+            
+        NewGame = Button(root, text="New\n Game", font=("Californian FB", 10, "bold"), command=lambda:newGame())
+        NewGame.grid(row=3, column=8, sticky="NSWE")
+        newGame()
+
+
+
     heading.destroy()
     LPhoto.destroy()
     StartButton.destroy()
@@ -121,7 +228,7 @@ def StartIsPressed():
     Animal.place(x=240, y=360)
     Brands = Button(root, text="Brands", font=("Californian FB", 15, "bold"), bg="blue", fg="white", padx=67, pady=5, justify="center", cursor="hand2",)#command=BrandsIsPressed
     Brands.place(x=240, y=420)
-    Application = Button(root, text="Application", font=("Californian FB", 15, "bold"), bg="blue", fg="white", padx=49, pady=5, justify="center", cursor="hand2" )#command=ApplicationIsPressed
+    Application = Button(root, text="Application", font=("Californian FB", 15, "bold"), bg="blue", fg="white", padx=49, pady=5, justify="center", cursor="hand2", command= ApplicationIsPressed)#command=ApplicationIsPressed
     Application.place(x=240, y=480)
 
 
