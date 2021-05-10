@@ -29,7 +29,8 @@ def StartIsPressed():
         Brands.destroy()
         Application.destroy()
         
-        word_list = ("APPLE", "AVOCADO", "BANANA", "BLACKBERRIES","MANGO", "APRICOT", "CANTALOUPE", "ORANGE", "WATERMELON", "CARAMBOLA", "CUSTARDAPPLE", "POMEGRANATE","GUAVA",
+        word_list = ("APPLE", "AVOCADO", "BANANA", "BLACKBERRIES","MANGO", "APRICOT", "CANTALOUPE",
+                     "ORANGE", "WATERMELON", "CARAMBOLA", "CUSTARDAPPLE", "POMEGRANATE","GUAVA",
                      "PEAR", "PLUM", "JACKFRUIT", "KIWI", "LYCHEE", "OLIVES", "PAPAYA", "RASPBERRIES", "PINEAPPLE")
 
         photos = [PhotoImage(file="hang0.png"), PhotoImage(file="hang1.png"), PhotoImage(file="hang2.png"), PhotoImage(file="hang3.png"), PhotoImage(file="hang4.png"), PhotoImage(file="hang5.png"), PhotoImage(file="hang6.png"),
@@ -46,9 +47,17 @@ def StartIsPressed():
             
         def guess(letter):
             global numberOfGuesses
+            global guessed_letters
             if numberOfGuesses<11:
                 txt=list(the_word_withSpaces)
                 guessed=list(lblWord.get())
+                print(guessed)
+                guessed_letters = []
+                for i in guessed:
+                    if i.isalpha():
+                        guessed_letters.append(i)
+                    
+                print(guessed_letters)
                 if the_word_withSpaces.count(letter)>0:
                     for c in range(len(txt)):
                         if txt[c]==letter:
@@ -63,11 +72,15 @@ def StartIsPressed():
                                 messagebox.showinfo("Hangman","Your score is 1")
                             else:
                                 messagebox.showinfo("Hangman","Your score is 0")
-                                
-                            
+                                         
                 else:
                     numberOfGuesses+=1
                     imgLabel.config(image=photos[numberOfGuesses])
+                    guessed=list(lblWord.get())
+                    show_letter = random.choice(list(set(the_word_withSpaces).difference(guessed_letters)))
+                    # show_letter = random.choice(list(the_word_withSpaces))
+                    print(show_letter)
+                    messagebox.showinfo("Hangman","Hint - One of the letter is %s " %(show_letter))
                     if numberOfGuesses==11:
                         messagebox.showwarning("Hangman","Game Over")
                     
